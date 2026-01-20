@@ -19,25 +19,23 @@ export default function Home() {
       
       {/* Navigation */}
       <nav className="fixed left-0 right-0 top-0 z-50 border-b border-border/10 bg-background/50 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
-          
-          <div className="flex items-center gap-5">
-            <img src="/Frame 13.png" alt="" 
-              className="h-8 w-8 -ml-20"/>
-            <span className="text-2xl font-bold">
-              
-              <span className="text-foreground">Hack</span>
-              <span className="text-primary">Mate</span>
-            </span>
-          </div>
-          <button 
-            onClick={scrollToForm}
-            className="rounded-full bg-primary/10 px-4 py-2 -mr-20 text-md font-medium text-primary transition-colors hover:bg-primary/20"
-          >
-            Get Early Access
-          </button>
-        </div>
-      </nav>
+  <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    
+    {/* Logo Section */}
+    <div className="flex items-center gap-2 sm:gap-3">
+      <img
+        src="/Frame 13.png"
+        alt="HackMate Logo"
+        className="h-7 w-7 sm:h-8 sm:w-8"
+      />
+      <span className="text-xl sm:text-2xl font-bold">
+        <span className="text-foreground">Hack</span>
+        <span className="text-primary">Mate</span>
+      </span>
+    </div>
+
+  </div>
+</nav>
 
       <HeroSection onGetStarted={scrollToForm} />
       <ValueSection />
