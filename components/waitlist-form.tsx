@@ -8,19 +8,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowRight, ArrowLeft, Check, Sparkles, Code, Palette, Server, Brain, Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface WaitlistFormProps {
   formRef: React.RefObject<HTMLDivElement | null>;
 }
 
 const intents = [
-  { id: "builder", label: "Builder", icon: Code, description: "I love shipping features" },
-  { id: "designer", label: "Designer", icon: Palette, description: "I craft experiences" },
-  { id: "backend", label: "Backend", icon: Server, description: "I build systems" },
+  { id: "frontend", label: "Frontend", icon: Code, description: "I love to build user interfaces" },
+  { id: "backend", label: "Backend", icon: Palette, description: "I love to work with API's" },
+  { id: "AI/ML", label: "AI/ML", icon: Server, description: "I talk to machines" },
   { id: "explorer", label: "Explorer", icon: Brain, description: "I'm here to learn" },
 ];
 
 export function WaitlistForm({ formRef }: WaitlistFormProps) {
+  const { toast } = useToast();
   const [step, setStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -42,12 +44,43 @@ export function WaitlistForm({ formRef }: WaitlistFormProps) {
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) throw new Error("Failed");
+      const data = await res.json();
+
+      if (!res.ok) {
+        if (res.status === 409) {
+          toast({
+            title: "Already Registered",
+            description: "You're already on the waitlist! We'll notify you when we launch.",
+            variant: "destructive",
+          });
+        } else if (res.status === 400) {
+          toast({
+            title: "Invalid Information",
+            description: "Please check your name, email, and intent selection.",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Something Went Wrong",
+            description: data.message || "Please try again later.",
+            variant: "destructive",
+          });
+        }
+        return;
+      }
 
       setIsSubmitted(true);
+      toast({
+        title: "Welcome to HackMate!",
+        description: "You've successfully joined the waitlist.",
+      });
     } catch (err) {
       console.error(err);
-      alert("Something went wrong");
+      toast({
+        title: "Network Error",
+        description: "Unable to connect. Please check your internet connection.",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
