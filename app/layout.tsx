@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: 'HackMate - Find Your Perfect Hackathon Team',
   description: 'Smart developer matchmaking for hackathons. Connect with the right people based on skills, interests, and hackathon mindset.',
   icons: {
-  
+    icon: '/favicon.ico',
   },
 }
 
