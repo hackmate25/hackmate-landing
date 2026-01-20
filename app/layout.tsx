@@ -1,7 +1,6 @@
 import React from "react"
 import type { Metadata, Viewport } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
 import { Toaster } from '@/components/ui/toaster'
 import './globals.css'
 
@@ -12,7 +11,7 @@ export const metadata: Metadata = {
   title: 'HackMate - Find Your Perfect Hackathon Team',
   description: 'Smart developer matchmaking for hackathons. Connect with the right people based on skills, interests, and hackathon mindset.',
   icons: {
-    apple: '/apple-icon.png',
+  
   },
 }
 
@@ -26,7 +25,6 @@ export default function RootLayout({
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
         {children}
         <Toaster />
-        <Analytics />
       </body>
     </html>
   )
