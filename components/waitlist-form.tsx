@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowRight, ArrowLeft, Check, Sparkles, Code, Palette, Server, Brain } from "lucide-react";
+import { ArrowRight, ArrowLeft, Check, Sparkles, Code, Palette, Server, Brain, Loader2 } from "lucide-react";
 
 interface WaitlistFormProps {
   formRef: React.RefObject<HTMLDivElement | null>;
@@ -23,6 +23,7 @@ const intents = [
 export function WaitlistForm({ formRef }: WaitlistFormProps) {
   const [step, setStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -31,21 +32,26 @@ export function WaitlistForm({ formRef }: WaitlistFormProps) {
   const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const handleSubmit = async () => {
-  try {
-    const res = await fetch("/api/waitlist", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+    if (isLoading) return;
+    setIsLoading(true);
 
-    if (!res.ok) throw new Error("Failed");
+    try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-    setIsSubmitted(true);
-  } catch (err) {
-    console.error(err);
-    alert("Something went wrong");
-  }
-};
+      if (!res.ok) throw new Error("Failed");
+
+      setIsSubmitted(true);
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
 
   const canProceedToStep2 = formData.name.trim() && formData.email.trim() && formData.email.includes("@");
@@ -306,12 +312,22 @@ export function WaitlistForm({ formRef }: WaitlistFormProps) {
                   </Button>
                   <Button
                     onClick={handleSubmit}
-                    disabled={!canSubmit}
+                    disabled={isLoading || !canSubmit}
+                    aria-busy={isLoading}
                     className="group flex-[2] bg-primary py-6 text-lg font-semibold text-primary-foreground transition-all hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(139,92,246,0.3)] disabled:opacity-50"
                   >
                     <span className="flex items-center justify-center gap-2">
-                      Enter HackMate
-                      <Sparkles className="h-5 w-5 transition-transform group-hover:scale-110" />
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="h-5 w-5 animate-spin" />
+                          <span>Submitting...</span>
+                        </>
+                      ) : (
+                        <>
+                          Enter HackMate
+                          <Sparkles className="h-5 w-5 transition-transform group-hover:scale-110" />
+                        </>
+                      )}
                     </span>
                   </Button>
                 </div>
