@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description: 'Smart developer matchmaking for hackathons. Connect with the right people based on skills, interests, and hackathon mindset.',
   icons: {
     icon: '/favicon.ico',
-    apple: "/apple-touch-icon.png",
+    apple: "/apple-touch-iconv2.png",
   },
 }
 
