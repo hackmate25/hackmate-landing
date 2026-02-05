@@ -35,6 +35,21 @@ export function WaitlistForm({ formRef }: WaitlistFormProps) {
 
   const handleSubmit = async () => {
     if (isLoading) return;
+     if (!isValidSrmEmail(formData.email)) {
+    toast({
+      title: "Invalid Email",
+      description: "Please use your SRM email ID (@srmist.edu.in).",
+      variant: "destructive",
+    });
+    return;
+  } if (!isValidSrmEmail(formData.email)) {
+    toast({
+      title: "Invalid Email",
+      description: "Please use your SRM email ID (@srmist.edu.in).",
+      variant: "destructive",
+    });
+    return;
+  }
     setIsLoading(true);
 
     try {
@@ -85,9 +100,14 @@ export function WaitlistForm({ formRef }: WaitlistFormProps) {
       setIsLoading(false);
     }
   };
+  const isValidSrmEmail = (email: string) =>
+  /^[a-zA-Z0-9._%+-]+@srmist\.edu\.in$/.test(email);
 
 
-  const canProceedToStep2 = formData.name.trim() && formData.email.trim() && formData.email.includes("@");
+
+  const canProceedToStep2 =
+  formData.name.trim() && isValidSrmEmail(formData.email);
+
   const canSubmit = canProceedToStep2 && formData.intent;
 
   if (isSubmitted) {
